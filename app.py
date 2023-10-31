@@ -1,17 +1,20 @@
+import os
 from dask import dataframe as dd
 
 
 def main():
     print('File format conversion started')
+    src_dir = os.environ['SRC_DIR']
+    tgt_dir = os.environ['TGT_DIR']
     df = dd.read_csv(
-        'data/nyse_all/nyse_data/NYSE*.txt.gz',
+        f'{src_dir}/NYSE*.txt.gz',
         names=['ticker', 'trade_date', 'open_price', 'low_price',
                'high_price', 'close_price', 'volume'],
         blocksize=None
     )
     print('Dataframe is created and will be writen in json format')
     df.to_json(
-        'data/nyse_all/nyse_json/part-*.json.gz',
+        f'{tgt_dir}/part-*.json.gz',
         orient='records',
         lines=True,
         compression='gzip',
